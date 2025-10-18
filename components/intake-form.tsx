@@ -344,7 +344,7 @@ export default function IntakeForm() {
               <div className="p-6 border-2 border-dashed border-border rounded-lg text-center bg-secondary/30 hover:bg-secondary/50 transition-colors">
                 <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground">
-                  {"You can also email files directly to hello@zenjamindev.com"}
+                  {"You can also email files directly to zenjamindev@gmail.com"}
                 </p>
               </div>
             </CardContent>
