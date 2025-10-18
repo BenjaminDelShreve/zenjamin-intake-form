@@ -39,12 +39,12 @@ export default function IntakeForm() {
 
         <form action="https://formspree.io/f/xdkwbjjnd" method="POST" className="space-y-6">
           {/* Business Basics */}
-          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
+          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 active:scale-105 active:shadow-xl active:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-primary hover:animate-bounce" />
+                <Lightbulb className="w-5 h-5 text-primary hover:animate-bounce active:animate-bounce" />
                 <CardTitle className="text-2xl">Business Basics</CardTitle>
-                <span className="text-xl hover:animate-bounce">💡</span>
+                <span className="text-xl hover:animate-bounce active:animate-bounce">💡</span>
               </div>
               <CardDescription>The essentials — who you are and how we can reach you</CardDescription>
             </CardHeader>
@@ -107,12 +107,12 @@ export default function IntakeForm() {
           </Card>
 
           {/* About Your Brand */}
-          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
+          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 active:scale-105 active:shadow-xl active:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-accent hover:animate-bounce" />
+                <Sparkles className="w-5 h-5 text-accent hover:animate-bounce active:animate-bounce" />
                 <CardTitle className="text-2xl">About Your Brand</CardTitle>
-                <span className="text-xl hover:animate-bounce">✨</span>
+                <span className="text-xl hover:animate-bounce active:animate-bounce">✨</span>
               </div>
               <CardDescription>Help us understand what makes you unique</CardDescription>
             </CardHeader>
@@ -150,12 +150,12 @@ export default function IntakeForm() {
           </Card>
 
           {/* Visual Style & Vibe */}
-          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
+          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 active:scale-105 active:shadow-xl active:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Palette className="w-5 h-5 text-chart-3 hover:rotate-6" />
+                <Palette className="w-5 h-5 text-chart-3 hover:rotate-6 active:rotate-6" />
                 <CardTitle className="text-2xl">Visual Style & Vibe</CardTitle>
-                <span className="text-xl hover:rotate-6">🎨</span>
+                <span className="text-xl hover:rotate-6 active:rotate-6">🎨</span>
               </div>
               <CardDescription>{"Let's talk aesthetics — what catches your eye?"}</CardDescription>
             </CardHeader>
@@ -216,12 +216,12 @@ export default function IntakeForm() {
           </Card>
 
           {/* Website Goals */}
-          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
+          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 active:scale-105 active:shadow-xl active:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-accent hover:animate-bounce" />
+                <Target className="w-5 h-5 text-accent hover:animate-bounce active:animate-bounce" />
                 <CardTitle className="text-2xl">Website Goals</CardTitle>
-                <span className="text-xl hover:animate-bounce">🎯</span>
+                <span className="text-xl hover:animate-bounce active:animate-bounce">🎯</span>
               </div>
               <CardDescription>What do you want your website to accomplish?</CardDescription>
             </CardHeader>
@@ -321,12 +321,12 @@ export default function IntakeForm() {
           </Card>
 
           {/* Photos, Logos & Files */}
-          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
+          <Card className="shadow-lg hover:shadow-xl hover:scale-105 hover:bg-blue-50 active:scale-105 active:shadow-xl active:bg-blue-50 transition-all duration-300 ease-in-out rounded-lg p-6">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Upload className="w-5 h-5 text-primary hover:rotate-6" />
+                <Upload className="w-5 h-5 text-primary hover:rotate-6 active:rotate-6" />
                 <CardTitle className="text-2xl">Photos, Logos & Files</CardTitle>
-                <span className="text-xl hover:rotate-6">📁</span>
+                <span className="text-xl hover:rotate-6 active:rotate-6">📁</span>
               </div>
               <CardDescription>Got assets to share? Drop links or let us know what you have</CardDescription>
             </CardHeader>
