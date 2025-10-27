@@ -106,6 +106,7 @@ Submitted on: ${new Date().toLocaleString()}
         }
       } else {
         // Production method: Use Formspree
+        console.log('🌐 Running on production - using Formspree')
         const formDataToSend = new FormData()
         
         formDataToSend.append('_subject', `New Intake Form Submission from ${formData.businessName || formData.contactName}`)
@@ -135,6 +136,7 @@ Submitted on: ${new Date().toLocaleString()}
         })
         
         try {
+          console.log('📤 Sending to Formspree...')
           const response = await fetch('https://formspree.io/f/xdkwbjnd', {
             method: 'POST',
             body: formDataToSend,
@@ -143,13 +145,26 @@ Submitted on: ${new Date().toLocaleString()}
             }
           })
           
+          console.log('📊 Response status:', response.status)
+          console.log('📊 Response ok:', response.ok)
+          
           if (response.ok) {
-            console.log('✅ Email sent via Formspree!')
+            console.log('✅ Email sent via Formspree successfully!')
           } else {
-            throw new Error('Formspree failed')
+            const errorText = await response.text()
+            console.log('❌ Formspree failed with status:', response.status)
+            console.log('❌ Error response:', errorText)
+            throw new Error(`Formspree failed with status ${response.status}`)
           }
         } catch (error) {
-          console.log('❌ Formspree failed:', error)
+          console.log('❌ Formspree error:', error)
+          // Fallback: copy to clipboard
+          try {
+            await navigator.clipboard.writeText(emailContent)
+            console.log('📋 Form data copied to clipboard as backup')
+          } catch (clipError) {
+            console.log('❌ Clipboard backup also failed:', clipError)
+          }
         }
       }
       
