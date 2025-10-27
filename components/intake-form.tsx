@@ -86,9 +86,14 @@ Submitted on: ${new Date().toLocaleString()}
       // For localhost: Use mailto + clipboard (works locally)
       // For production: Formspree will work automatically
       
-      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.includes('localhost')
+      console.log('🌐 Current hostname:', window.location.hostname)
+      console.log('🌐 Is localhost:', isLocalhost)
       
-      if (isLocalhost) {
+      // Force Formspree mode for testing (remove this line when ready for production)
+      const forceFormspree = true
+      
+      if (isLocalhost && !forceFormspree) {
         // Localhost method: Copy to clipboard + open email client
         try {
           await navigator.clipboard.writeText(emailContent)
