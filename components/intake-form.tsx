@@ -130,10 +130,15 @@ Submitted on: ${new Date().toLocaleString()}
         formDataToSend.append('timeline', formData.timeline)
         formDataToSend.append('budget', formData.budget)
         
-        // Add uploaded files
-        uploadedFiles.forEach((file, index) => {
-          formDataToSend.append(`file_${index}`, file)
-        })
+        // Add file information as text (not actual files)
+        if (uploadedFiles.length > 0) {
+          const fileList = uploadedFiles.map((file, index) => 
+            `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`
+          ).join('\n')
+          formDataToSend.append('uploaded_files_info', `Files uploaded:\n${fileList}\n\nNote: Files were uploaded but cannot be attached via Formspree. Please request files from client if needed.`)
+        } else {
+          formDataToSend.append('uploaded_files_info', 'No files uploaded')
+        }
         
         try {
           console.log('📤 Sending to Formspree...')
@@ -150,6 +155,21 @@ Submitted on: ${new Date().toLocaleString()}
           
           if (response.ok) {
             console.log('✅ Email sent via Formspree successfully!')
+            
+            // If there were files uploaded, create a downloadable file for you
+            if (uploadedFiles.length > 0) {
+              console.log('📁 Creating downloadable file with uploaded files...')
+              const fileBlob = new Blob([emailContent], { type: 'text/plain' })
+              const fileUrl = URL.createObjectURL(fileBlob)
+              const fileLink = document.createElement('a')
+              fileLink.href = fileUrl
+              fileLink.download = `intake-form-files-${formData.businessName || 'submission'}-${new Date().toISOString().split('T')[0]}.txt`
+              document.body.appendChild(fileLink)
+              fileLink.click()
+              document.body.removeChild(fileLink)
+              URL.revokeObjectURL(fileUrl)
+              console.log('📁 File with form data downloaded')
+            }
           } else {
             const errorText = await response.text()
             console.log('❌ Formspree failed with status:', response.status)
