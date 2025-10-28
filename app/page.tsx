@@ -1,4 +1,4 @@
-import IntakeForm from "@/components/intake-form"
+"use client"import IntakeForm from "@/components/intake-form"
 
 export default function Home() {
   return (
