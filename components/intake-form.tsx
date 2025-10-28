@@ -22,7 +22,7 @@ export default function IntakeForm() {
 
   // Initialize EmailJS (you'll need to replace these with your actual values)
   React.useEffect(() => {
-    emailjs.init('YOUR_PUBLIC_KEY') // Replace with your EmailJS public key
+    emailjs.init('D1t9Fx14-SaPZl4qz') // Replace with your EmailJS public key
   }, [])
 
   const [formData, setFormData] = useState({
@@ -83,10 +83,10 @@ export default function IntakeForm() {
       
       // Send email using EmailJS
       const result = await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        'service_5rhpjsn', // Replace with your EmailJS service ID
+        'template_g9a4y3', // Replace with your EmailJS template ID
         templateParams,
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+        'D1t9Fx14-SaPZl4qz' // Replace with your EmailJS public key
       )
       
       console.log('✅ Email sent successfully!', result.text)
