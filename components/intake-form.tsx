@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Sparkles, Lightbulb, Palette, Target, Upload } from "lucide-react"
+import emailjs from '@emailjs/browser'
 
 export default function IntakeForm() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
@@ -18,7 +19,12 @@ export default function IntakeForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submittedEmail, setSubmittedEmail] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
-  
+
+  // Initialize EmailJS (you'll need to replace these with your actual values)
+  React.useEffect(() => {
+    emailjs.init('YOUR_PUBLIC_KEY') // Replace with your EmailJS public key
+  }, [])
+
   const [formData, setFormData] = useState({
     // Business Basics
     businessName: "",
@@ -49,149 +55,41 @@ export default function IntakeForm() {
     setIsSubmitting(true)
     
     try {
-      // Create comprehensive email content
-      const emailContent = `
-New Intake Form Submission
-
-BUSINESS BASICS:
-Business Name: ${formData.businessName}
-Contact Name: ${formData.contactName}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Website: ${formData.website}
-
-ABOUT YOUR BRAND:
-Business Description: ${formData.businessDescription}
-Target Audience: ${formData.targetAudience}
-Unique Value: ${formData.uniqueValue}
-
-VISUAL STYLE & VIBE:
-Style Preferences: ${formData.stylePreference.join(', ')}
-Color Preferences: ${formData.colorPreferences}
-Inspiration Sites: ${formData.inspirationSites}
-
-WEBSITE GOALS:
-Primary Goals: ${formData.primaryGoal.join(', ')}
-Features: ${formData.features.join(', ')}
-Timeline: ${formData.timeline}
-Budget: ${formData.budget}
-
-UPLOADED FILES:
-${uploadedFiles.length > 0 ? uploadedFiles.map(file => `- ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`).join('\n') : 'No files uploaded'}
-
----
-Submitted on: ${new Date().toLocaleString()}
-      `.trim()
-
-      // For localhost: Use mailto + clipboard (works locally)
-      // For production: Formspree will work automatically
+      console.log('📧 Using EmailJS to send email...')
       
-      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.includes('localhost')
-      console.log('🌐 Current hostname:', window.location.hostname)
-      console.log('🌐 Is localhost:', isLocalhost)
-      
-      // Force Formspree mode for testing (remove this line when ready for production)
-      const forceFormspree = true
-      
-      if (isLocalhost && !forceFormspree) {
-        // Localhost method: Copy to clipboard + open email client
-        try {
-          await navigator.clipboard.writeText(emailContent)
-          console.log('📋 Form data copied to clipboard')
-          
-          // Try to open email client
-          const subject = `New Intake Form Submission from ${formData.businessName || formData.contactName}`
-          const body = encodeURIComponent(emailContent)
-          const mailtoLink = `mailto:zenjamindev@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`
-          
-          window.open(mailtoLink, '_blank')
-          console.log('📧 Email client opened')
-        } catch (error) {
-          console.log('❌ Local method failed:', error)
-        }
-      } else {
-        // Production method: Use Formspree
-        console.log('🌐 Running on production - using Formspree')
-        const formDataToSend = new FormData()
-        
-        formDataToSend.append('_subject', `New Intake Form Submission from ${formData.businessName || formData.contactName}`)
-        formDataToSend.append('_replyto', formData.email)
-        formDataToSend.append('_cc', 'zenjamindev@gmail.com')
-        
-        // Add all form fields
-        formDataToSend.append('business_name', formData.businessName)
-        formDataToSend.append('contact_name', formData.contactName)
-        formDataToSend.append('email', formData.email)
-        formDataToSend.append('phone', formData.phone)
-        formDataToSend.append('website', formData.website)
-        formDataToSend.append('business_description', formData.businessDescription)
-        formDataToSend.append('target_audience', formData.targetAudience)
-        formDataToSend.append('unique_value', formData.uniqueValue)
-        formDataToSend.append('style_preference', formData.stylePreference.join(', '))
-        formDataToSend.append('color_preferences', formData.colorPreferences)
-        formDataToSend.append('inspiration_sites', formData.inspirationSites)
-        formDataToSend.append('primary_goal', formData.primaryGoal.join(', '))
-        formDataToSend.append('features', formData.features.join(', '))
-        formDataToSend.append('timeline', formData.timeline)
-        formDataToSend.append('budget', formData.budget)
-        
-        // Add file information as text (not actual files)
-        if (uploadedFiles.length > 0) {
-          const fileList = uploadedFiles.map((file, index) => 
-            `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`
-          ).join('\n')
-          formDataToSend.append('uploaded_files_info', `Files uploaded:\n${fileList}\n\nNote: Files were uploaded but cannot be attached via Formspree. Please request files from client if needed.`)
-        } else {
-          formDataToSend.append('uploaded_files_info', 'No files uploaded')
-        }
-        
-        try {
-          console.log('📤 Sending to Formspree...')
-          const response = await fetch('https://formspree.io/f/xdkwbjnd', {
-            method: 'POST',
-            body: formDataToSend,
-            headers: {
-              'Accept': 'application/json'
-            }
-          })
-          
-          console.log('📊 Response status:', response.status)
-          console.log('📊 Response ok:', response.ok)
-          
-          if (response.ok) {
-            console.log('✅ Email sent via Formspree successfully!')
-            
-            // If there were files uploaded, create a downloadable file for you
-            if (uploadedFiles.length > 0) {
-              console.log('📁 Creating downloadable file with uploaded files...')
-              const fileBlob = new Blob([emailContent], { type: 'text/plain' })
-              const fileUrl = URL.createObjectURL(fileBlob)
-              const fileLink = document.createElement('a')
-              fileLink.href = fileUrl
-              fileLink.download = `intake-form-files-${formData.businessName || 'submission'}-${new Date().toISOString().split('T')[0]}.txt`
-              document.body.appendChild(fileLink)
-              fileLink.click()
-              document.body.removeChild(fileLink)
-              URL.revokeObjectURL(fileUrl)
-              console.log('📁 File with form data downloaded')
-            }
-          } else {
-            const errorText = await response.text()
-            console.log('❌ Formspree failed with status:', response.status)
-            console.log('❌ Error response:', errorText)
-            throw new Error(`Formspree failed with status ${response.status}`)
-          }
-        } catch (error) {
-          console.log('❌ Formspree error:', error)
-          // Fallback: copy to clipboard
-          try {
-            await navigator.clipboard.writeText(emailContent)
-            console.log('📋 Form data copied to clipboard as backup')
-          } catch (clipError) {
-            console.log('❌ Clipboard backup also failed:', clipError)
-          }
-        }
+      // Prepare EmailJS template parameters
+      const templateParams = {
+        business_name: formData.businessName,
+        contact_name: formData.contactName,
+        email: formData.email,
+        phone: formData.phone,
+        website: formData.website,
+        business_description: formData.businessDescription,
+        target_audience: formData.targetAudience,
+        unique_value: formData.uniqueValue,
+        style_preference: formData.stylePreference.join(', '),
+        color_preferences: formData.colorPreferences,
+        inspiration_sites: formData.inspirationSites,
+        primary_goal: formData.primaryGoal.join(', '),
+        features: formData.features.join(', '),
+        timeline: formData.timeline,
+        budget: formData.budget,
+        uploaded_files: uploadedFiles.length > 0 
+          ? uploadedFiles.map(file => `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`).join(', ')
+          : 'No files uploaded',
+        submission_date: new Date().toLocaleString(),
+        to_email: 'zenjamindev@gmail.com'
       }
+      
+      // Send email using EmailJS
+      const result = await emailjs.send(
+        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        templateParams,
+        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+      )
+      
+      console.log('✅ Email sent successfully!', result.text)
       
       // Store email for success screen
       setSubmittedEmail(formData.email)
@@ -223,7 +121,7 @@ Submitted on: ${new Date().toLocaleString()}
       }
       
     } catch (error) {
-      console.error('Error submitting form:', error)
+      console.error('❌ EmailJS error:', error)
       alert('There was an error submitting your form. Please try again or email us directly at zenjamindev@gmail.com')
     } finally {
       setIsSubmitting(false)
