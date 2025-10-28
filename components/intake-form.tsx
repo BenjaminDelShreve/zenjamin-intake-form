@@ -78,7 +78,7 @@ export default function IntakeForm() {
           ? uploadedFiles.map(file => `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`).join(', ')
           : 'No files uploaded',
         submission_date: new Date().toLocaleString(),
-        to_email: 'zenjamindev@gmail.com'
+      
       }
       
       // Send email using EmailJS
